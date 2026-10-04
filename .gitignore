@@ -1,0 +1,16 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Prebuilt installers — publish via GitHub Releases (files >100MB cannot go in git)
+public_distro/release_*/
+*.dmg
+*.exe
+*.tar.gz
+*.apk
+
+# Keep screenshots / docs under public_distro/media/
+!public_distro/media/
