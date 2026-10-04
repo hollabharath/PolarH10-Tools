@@ -28,8 +28,6 @@ Installers are on **[GitHub Releases](https://github.com/hollabharath/PolarH10-T
 | `PolarH10Acquisition-linux-v1.1.0.tar.gz` | Linux |
 | `PARAM_H10_Companion-2026-10-03-8.apk` | Android |
 
-Screenshots and docs media stay in [`public_distro/media/`](public_distro/media/).
-
 ---
 
 ## Desktop — Setup
@@ -37,8 +35,6 @@ Screenshots and docs media stay in [`public_distro/media/`](public_distro/media/
 Configure participant / session / task, pick a Polar H10, optionally enable **Run QC / HRV metrics**, **Upload Data** (rclone), or **Receive from phone** (LAN ingest).
 
 ![Desktop setup](public_distro/media/setup.png)
-
-**What you can do here**
 
 - Enter **Participant**, **Session**, optional **Name / Age / Sex**
 - Choose **Resting State** or **Active Task**
