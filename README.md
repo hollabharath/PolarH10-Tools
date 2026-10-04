@@ -19,7 +19,7 @@ Desktop + Android tools for **research-grade Polar H10** recording: live ECG / R
 
 ### Downloads (v1.1.0)
 
-Installers are on **[GitHub Releases](https://github.com/hollabharath/PolarH10-Tools/releases)** (not in this repo — they exceed GitHub’s 100 MB git limit):
+Installers are on **[GitHub Releases](https://github.com/hollabharath/PolarH10-Tools/releases)** 
 
 | File | Platform |
 |------|----------|
