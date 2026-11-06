@@ -4,9 +4,9 @@
   <img src="public_distro/media/hrv_logo.png" alt="HRV" height="56" />
 </p>
 
-Desktop + Android tools for **research-grade Polar H10** recording: live ECG / RR / acceleration, BIDS-style files, optional HRV QC reports, and cloud upload.
+Desktop + Android tools for **research-grade Polar H10** recording: live ECG / RR / acceleration, BIDS-style files, optional HRV QC, LSL ECG, and lab upload.
 
-**Author:** Dr. Bharath Holla, NIMHANS 
+**Author:** Dr. Bharath Holla, NIMHANS
 
 ---
 
@@ -14,123 +14,95 @@ Desktop + Android tools for **research-grade Polar H10** recording: live ECG / R
 
 | App | Platform | Role |
 |-----|----------|------|
-| **Polar H10 Acquisition** | macOS · Windows · Linux | Setup session → stream & mark events → save → Run QC / Upload |
-| **PARAM H10 Companion** | Android | Phone-side live recording; export into desktop Local data |
+| **Polar H10 Acquisition** | macOS · Windows · Linux | Setup → stream & mark events → save → Run QC / Upload |
+| **PARAM H10 Companion** | Android | Phone-side live recording; Share / LAN upload into desktop Local data |
 
-### Downloads (v1.1.0)
+### Downloads
 
-Installers are on **[GitHub Releases](https://github.com/hollabharath/PolarH10-Tools/releases)** 
+Installers are on **[GitHub Releases](https://github.com/hollabharath/PolarH10-Tools/releases)** ([v1.2.0](https://github.com/hollabharath/PolarH10-Tools/releases/tag/v1.2.0) for current macOS / Linux / Android).
 
-| File | Platform |
-|------|----------|
-| `PolarH10Acquisition-v1.1.0.dmg` | macOS |
-| `PolarH10Acquisition-v1.1.0.exe` | Windows |
-| `PolarH10Acquisition-linux-v1.1.0.tar.gz` | Linux |
-| `PARAM_H10_Companion-2026-10-03-8.apk` | Android |
+| Asset | Platform | Version |
+|-------|----------|---------|
+| `PolarH10Acquisition-v1.2.0.dmg` | macOS | **v1.2.0** |
+| `PolarH10Acquisition-linux-v1.2.0.tar.gz` | Linux | **v1.2.0** |
+| `PARAM_H10_Companion-v1.2.0.apk` | Android | **v1.2.0** |
+| Windows `.exe` | Windows | **v1.1** (v1.2 build coming soon) |
+
+(Local copies for testing may also exist under [`public_distro/`](public_distro/).)
 
 ---
 
 ## Desktop — Setup
 
-Configure participant / session / task, pick a Polar H10, optionally enable **Run QC / HRV metrics**, **Upload Data** (rclone), or **Receive from phone** (LAN ingest).
+Session metadata, device search, equilibration, QC window, rclone upload, and LAN ingest from the phone.
 
-![Desktop setup](public_distro/media/setup.png)
-
-- Enter **Participant**, **Session**, optional **Name / Age / Sex**
-- Choose **Resting State** or **Active Task**
-- Set **Device ID** (Recent list or **Search**)
-- Optional fixed **Duration** and **Epochs CSV** (named markers — example: [`hrv_markers.csv`](hrv_markers.csv))
-- **Run QC** on existing Local data, or **Upload** without starting a recording
-- Enable LAN ingest so the phone can push files into Local data
-
-Example epochs CSV (`epoch_number` → keys `1`–`9` during recording):
-
-```csv
-epoch_number,epoch_name
-1,Baseline
-2,Rest
-3,HG
-4,Recovery
-```
+![Desktop setup](public_distro/media/desktop_setup.png)
 
 ---
 
-## Desktop — Live acquisition
+## Desktop — Live
 
-Fullscreen stream with live HRV (HR, RMSSD, LF%, HF%, LF/HF). Finish stops and saves.
+Fullscreen ECG, RR, and ACC strips with live HRV (HR, RMSSD, LF%, HF%, LF/HF). `Space` / `1`–`9` mark epochs; **Finish** saves BIDS-style TSVs.
 
-![Desktop acquisition](public_distro/media/acquisition.png)
-
-**During recording**
-
-| Control | Action |
-|---------|--------|
-| `Space` | Unnamed epoch marker |
-| `1`–`9` | Named epoch (from epochs CSV) |
-| `Esc` / **Finish** | Stop and save |
-
-**Streams**
-
-- ECG (~130 Hz)
-- RR intervals + instant HR
-- Acceleration X / Y / Z (~200 Hz)
-
-**After save (if enabled)**
-
-- NeuroKit **QC PDF** + metrics CSV under `report_polar/`
-- Optional **rclone** copy to your lab remote
-
-Data home (packaged app): `~/Documents/PolarH10/data/`
+![Desktop live acquisition](public_distro/media/desktop_live.png)
 
 ---
 
 ## Android companion
 
-Phone-side recording with protocol presets or live event markers, signal-quality strip, keep-awake / foreground service, Library export, and optional LAN upload to the desktop app. Same BIDS-like TSV layout for later QC.
+### Session & protocol setup
 
-### Setup
-
-Protocol mode (timed sequence) or a single preset; participant / session fields; scan or enter H10 Device ID; then **Start**.
+Choose **Protocol** or **Live Event**, enter participant / session / operator, pick a preset or named sequence, set equilibration, then connect the H10.
 
 <p>
-  <img src="public_distro/media/android_setup1.jpeg" alt="Companion setup — protocol mode" width="240" />
+  <img src="public_distro/media/android_setup_session.jpeg" alt="Companion — protocol mode and participant fields" width="240" />
   &nbsp;
-  <img src="public_distro/media/android_setup2.jpeg" alt="Companion setup — device and start" width="240" />
+  <img src="public_distro/media/android_setup_device.jpeg" alt="Companion — device ID and Start" width="240" />
 </p>
 
-### Live
+### SOP protocols (on-screen instructions)
 
-Rest and paced-breathing streams with quality badge, HR / RR, ECG + ACC strips, **Mark event** / **Finish**.
+Built-in **HRVStress** and **BodySway** sequences show phase lists and participant-facing SOP text. Handgrip and each sway stance wait for **Begin**; other HRV phases can auto-advance.
 
 <p>
-  <img src="public_distro/media/android_live2.jpeg" alt="Companion live — rest" width="240" />
+  <img src="public_distro/media/android_setup_hrvstress.jpeg" alt="HRVStress protocol and instructions" width="240" />
   &nbsp;
-  <img src="public_distro/media/android_live1.jpeg" alt="Companion live — paced breathing" width="240" />
+  <img src="public_distro/media/android_setup_bodysway.jpeg" alt="BodySway protocol and instructions" width="240" />
 </p>
 
-### Settings
+### Live recording
 
-Edit protocol presets (duration, optional inhale/exhale), Live Event buttons, and **Lab upload** (desktop LAN ingest URL + token).
+Quality strip, phase / remaining time, HR + RR, ECG and ACC traces, optional event buttons, **Mark event** / **Finish**. Keep-awake and foreground service stay on during the run.
 
 <p>
-  <img src="public_distro/media/android_settings1.jpeg" alt="Protocol presets" width="220" />
-  &nbsp;
-  <img src="public_distro/media/android_settings2.jpeg" alt="Event buttons" width="220" />
-  &nbsp;
-  <img src="public_distro/media/android_settings3.jpeg" alt="Lab upload settings" width="220" />
+  <img src="public_distro/media/android_live.jpeg" alt="Companion live — ECG RR ACC" width="260" />
+</p>
+
+### Settings — protocols & markers
+
+Edit presets, multi-step protocols (PARAM defaults), and Live Event buttons.
+
+<p>
+  <img src="public_distro/media/android_settings_protocols.jpeg" alt="Settings — presets, protocols, event buttons" width="260" />
+</p>
+
+### Settings — LSL & lab upload
+
+Optional phone ACC export, **LSL ECG** (see [LSL ECG](#lsl-ecg-optional) below), and LAN upload to the desktop ingest URL.
+
+<p>
+  <img src="public_distro/media/android_settings_lsl_upload.jpeg" alt="Settings — LSL ECG and lab upload" width="260" />
 </p>
 
 ### Library
 
-Browse saved runs, **Share** / **Re-upload**, filter by participant / session / task.
+Browse runs with QC grade, filter by participant / session / task, **Upload**, **Share** (BIDS zip), or delete. Batch select for multi-run share/upload.
 
 <p>
-  <img src="public_distro/media/android_data_library.jpeg" alt="Companion library" width="240" />
+  <img src="public_distro/media/android_library.jpeg" alt="Companion library" width="260" />
 </p>
 
-**Typical flow:** Setup → **Start** → **Finish** → Library **Share** or auto-upload → desktop **Local data** → **Run QC** / **Upload**.
-
-For LAN ingest: desktop Setup → **Receive from phone** → Copy URL → paste under companion Settings → Lab upload.
+**Typical flow:** Setup → **Start** → **Finish** → Library **Share** / upload → desktop Local data → **Run QC** / rclone **Upload**.
 
 ---
 
@@ -143,28 +115,44 @@ data/sub-{id}/ses-{id}/
   sub-…_task-…_run-NN_acc.tsv
   sub-…_task-…_run-NN_events.tsv
   sub-…_task-…_run-NN.json
-  report_polar/                 # after QC
-    <stem>_polar_indices.csv
-    plots/<stem>_qc.pdf
+  report_polar/                 # after desktop QC
 ```
+
+Desktop data home: `~/Documents/PolarH10/data/`
 
 ---
 
 ## Quick start
 
-### Packaged desktop
-
-1. Download the build for your OS from **[Releases](https://github.com/hollabharath/PolarH10-Tools/releases)** (macOS: open the `.dmg` and drag the app to Applications).
-2. Grant **Bluetooth** when asked.
-3. Open the app → fill Setup → **Start**.
-4. Optional: tick **Run QC / HRV metrics** and/or **Upload Data** (rclone).
+1. Download the desktop build for your OS from **[Releases](https://github.com/hollabharath/PolarH10-Tools/releases)** — macOS / Linux from [v1.2.0](https://github.com/hollabharath/PolarH10-Tools/releases/tag/v1.2.0); Windows use the **v1.1** `.exe` until the v1.2 Windows build is posted (macOS: drag `.app` to Applications).
+2. Grant **Bluetooth** when asked → Setup → **Start**.
+3. Android: install the Companion APK from [v1.2.0](https://github.com/hollabharath/PolarH10-Tools/releases/tag/v1.2.0), pick protocol/device → **Start**.
+4. Optional: desktop **Receive from phone** → copy URL into Companion Settings → Lab upload.
 
 **macOS Gatekeeper** (unsigned research build): Control-click → Open, or  
 `xattr -dr com.apple.quarantine /Applications/PolarH10Acquisition.app`
 
-### Android
+---
 
-Install the Companion `.apk` from **[Releases](https://github.com/hollabharath/PolarH10-Tools/releases)**.
+## LSL ECG (optional)
+
+The Companion can publish Polar H10 **ECG on Lab Streaming Layer** while recording, so a lab PC on the **same Wi‑Fi** can time-lock ECG to task events (LabRecorder, PsychoPy markers, etc.).
+
+**How it works**
+
+- Settings → enable **LSL ECG stream** → start a normal recording (ECG must be streaming before the task; do not wait for `TASK_START`).
+- Outlet name is typically `PolarH10_ECG` (float32 samples at the H10 ECG rate).
+- Sample stamps are mapped from the Polar sensor clock into LSL time (estimate offset/drift; assign via a slowly updated map — not “whatever wall clock the packet arrived”).
+- After Finish, a sidecar `*_lsl.tsv` (when present) records timing diagnostics for sync checks.
+
+**Typical lab setup**
+
+1. Phone and PC on the same Wi‑Fi (multicast / local discovery).
+2. Companion: LSL ECG **on**, start recording.
+3. PC: open [LabRecorder](https://github.com/labstreaminglayer/App-LabRecorder) and confirm `PolarH10_ECG` appears; optionally record a marker stream (e.g. PsychoPy → pylsl).
+4. Example marker script: [`examples/psychopy_lsl_markers.py`](examples/psychopy_lsl_markers.py). Helper discovery / plot tools under [`lsl/`](lsl/).
+
+LSL is independent of BIDS file export and of LAN/rclone upload — it is a live sync path for event-locked analysis.
 
 ---
 
@@ -250,4 +238,4 @@ MIT
 
 ## Acknowledgments
 
-Polar H10 · [Bleak](https://github.com/hbldh/bleak) · NeuroKit2 · MNE (multitaper HRV in QC) · rclone · BIDS-inspired naming
+Polar H10 · [Bleak](https://github.com/hbldh/bleak) · NeuroKit2 · MNE · rclone · liblsl · BIDS-inspired naming
